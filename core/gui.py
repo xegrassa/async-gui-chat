@@ -4,6 +4,7 @@ from tkinter.scrolledtext import ScrolledText
 from enum import Enum
 
 
+
 class TkAppClosed(Exception):
     pass
 
