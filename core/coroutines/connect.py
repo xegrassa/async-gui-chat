@@ -7,11 +7,11 @@ from asyncio import StreamReader, StreamWriter
 from anyio import create_task_group
 from async_timeout import timeout
 
-from core import gui, Notification
+from core import Notification, gui
 from core.const import Queue
-from core.coroutines.decorators_and_managers import open_connection, reconnect
 from core.coroutines.autorisation import sign_in
 from core.coroutines.chatter import read_msgs, send_msgs
+from core.coroutines.decorators_and_managers import open_connection, reconnect
 
 watchdog_logger = logging.getLogger('watchdog')
 
@@ -71,7 +71,6 @@ async def handle_connection(host, listen_port, write_port, queues: Queue, token=
 
             queues.watchdog.put_nowait(Notification.PROMPT_BEFORE_AUTH)
             response = await sign_in(conn, token)
-            print(response)
             queues.watchdog.put_nowait(Notification.AUTHORIZATION_DONE)
 
             queues.status_updates.put_nowait(gui.NicknameReceived(response['nickname']))

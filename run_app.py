@@ -9,16 +9,16 @@ from core import gui
 from core.cli import parse_args
 from core.const import Queue
 from core.coroutines.connect import handle_connection
-from core.coroutines.files import restore_history_from, save_messages
+from core.coroutines.files import restore_history, save_messages
 from core.exceptions import InvalidTokenError
 
 logger = logging.getLogger(__name__)
 
 
 async def main(host, listen_port, write_port, history_path, token):
-    queues = Queue(asyncio.Queue(), asyncio.Queue(), asyncio.Queue(), asyncio.Queue(), asyncio.Queue())
+    queues = Queue(*[asyncio.Queue() for _ in range(5)])
 
-    await restore_history_from(history_path, queues.messages)
+    await restore_history(history_path, queues.messages)
 
     async with create_task_group() as tg:
         tg.start_soon(gui.draw, queues.messages, queues.sending, queues.status_updates)

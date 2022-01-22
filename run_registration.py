@@ -11,10 +11,10 @@ from core.coroutines.decorators_and_managers import open_connection
 from core.coroutines.files import write_token
 
 
-async def registration_new_user(host, port, name):
+async def user_registration(host, port, user_name):
     """Регистрация нового пользователя и запись его токена в файл."""
     async with open_connection(host, port) as conn:
-        token = await sign_up(conn, name)
+        token = await sign_up(conn, user_name)
     await write_token(token, 'token.txt')
     messagebox.showinfo("Токен сохранен", token)
 
@@ -22,7 +22,7 @@ async def registration_new_user(host, port, name):
 def registration_event(entry, host, port):
     """Обработчик события нажатие на кнопку 'Зарегистрироваться'."""
     name = entry.get()
-    asyncio.run(registration_new_user(host, port, name))
+    asyncio.run(user_registration(host, port, name))
 
 
 def main(args):

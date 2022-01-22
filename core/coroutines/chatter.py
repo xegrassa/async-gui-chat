@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from asyncio import StreamWriter, StreamReader
+from asyncio import StreamReader, StreamWriter
 
 from core import Notification
 from core.const import Queue

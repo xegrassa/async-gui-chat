@@ -14,7 +14,7 @@ async def add_msg_to_history(message: str, path):
         await f.write(message)
 
 
-async def restore_history_from(history_path: str, queue: asyncio.Queue):
+async def restore_history(history_path: str, queue: asyncio.Queue):
     """Востанавливает историю в GUI из файла Логов истории"""
     if Path(history_path).exists():
         async with aiofiles.open(history_path, 'r', encoding='utf-8') as f:
@@ -22,24 +22,24 @@ async def restore_history_from(history_path: str, queue: asyncio.Queue):
                 queue.put_nowait(line)
 
 
-async def save_messages(filepath, history_queue: asyncio.Queue):
+async def save_messages(file_path, history_queue: asyncio.Queue):
     """
     Сохраняет сообщение в Лог.
 
-    :param filepath: Путь до файла логов
+    :param file_path: Путь до файла логов
     :param queue: Очередь для отправки сообщений в Логи
     """
     while True:
         msg = await history_queue.get()
-        await add_msg_to_history(msg, filepath)
+        await add_msg_to_history(msg, file_path)
 
 
-async def write_token(token: str, path: str):
+async def write_token(token: str, file_path: str):
     """
     Запись токена в файл.
 
     :param token: Токен
-    :param path: Путь до файла (Если его нет то создастся)
+    :param file_path: Путь до файла (Если его нет то создастся)
     """
-    async with aiofiles.open(path, 'w', encoding='utf-8') as f:
+    async with aiofiles.open(file_path, 'w', encoding='utf-8') as f:
         await f.write(f'token = {token}')
